@@ -10,7 +10,7 @@ let primaryDataSchema = new Schema({
         require: true
     },
     middleName: {
-        type: String,,
+        type: String,
     },
     lastName: {
         type: String,
