@@ -5,12 +5,13 @@ const Schema = mongoose.Schema;
 //collection for intakeData
 let primaryDataSchema = new Schema({
     _id: { type: String, default: uuid.v1 },
+    clientID: {
+        type: int,
+        require: true
+    },
     firstName: {
         type: String,
         require: true
-    },
-    orgID: {
-        type: String,   
     },
     middleName: {
         type: String,
@@ -58,6 +59,9 @@ let eventDataSchema = new Schema({
     eventName: {
         type: String,
         require: true
+    },
+    clientID: {
+        type: int
     },
     orgID: {
         type: int
