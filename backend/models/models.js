@@ -5,6 +5,10 @@ const Schema = mongoose.Schema;
 //collection for intakeData
 let primaryDataSchema = new Schema({
     _id: { type: String, default: uuid.v1 },
+    clientID: {
+        type: int,
+        require: true
+    },
     firstName: {
         type: String,
         require: true
@@ -16,31 +20,34 @@ let primaryDataSchema = new Schema({
         type: String,
         required: true
     },
-    email: {
-        type: String
-    },
-    phoneNumbers: {
-        type: Array,
-        required: true
-    },
-    address: {
-        line1: {
+    contact: {
+        email: {
             type: String
         },
-        line2: {
-            type: String,
-        },
-        city: {
-            type: String,
+        phoneNumbers: {
+            type: Array,
             required: true
         },
-        county: {
-            type: String,
-        },
-        zip: {
-            type: String,
+        address: {
+            line1: {
+                type: String
+            },
+            line2: {
+                type: String,
+            },
+            city: {
+                type: String,
+                required: true
+            },
+            county: {
+                type: String,
+            },
+            zip: {
+                type: int,
+            }
         }
-    }
+    },          
+    
 }, {
     collection: 'primaryData',
     timestamps: true
@@ -52,6 +59,15 @@ let eventDataSchema = new Schema({
     eventName: {
         type: String,
         require: true
+    },
+    clientID: {
+        type: int
+    },
+    orgID: {
+        type: int
+    },
+    chwID: {
+        type: int
     },
     services: {
         type: Array
@@ -74,7 +90,7 @@ let eventDataSchema = new Schema({
             type: String,
         },
         zip: {
-            type: String,
+            type: int,
         }
     },
     description: {
@@ -87,9 +103,95 @@ let eventDataSchema = new Schema({
     collection: 'eventData'
 });
 
+//collection for ORG data
+let ORGDataSchema = new Schema({
+    _id: { type: String, default: uuid.v1 },
+    orgCode: {
+        type: int,
+        require: true
+    },
+    orgName: {
+        type: String
+    },
+    contact: {
+        email: {
+            type: String
+        },
+        phoneNumbers: {
+            type: Array,
+            required: true
+        },
+        address: {
+            line1: {
+                type: String
+            },
+            line2: {
+                type: String,
+            },
+            city: {
+                type: String,
+                required: true
+            },
+            county: {
+                type: String,
+            },
+            zip: {
+                type: int,
+            }
+        }
+    },          
+    description: {
+        type: String,
+    },
+    attendees: [{
+        type: String
+    }]
+}, {
+    collection: 'orgData'
+});
+
+//collection for ORG data
+let chwDataSchema = new Schema({
+    _id: { type: String, default: uuid.v1 },
+    chwID: {
+        type: int,
+        require: true
+    },
+    contact: {
+        email: {
+            type: String
+        },
+        phoneNumbers: {
+            type: Array,
+            required: true
+        },
+        address: {
+            line1: {
+                type: String
+            },
+            line2: {
+                type: String,
+            },
+            city: {
+                type: String,
+                required: true
+            },
+            county: {
+                type: String,
+            },
+            zip: {
+                type: int,
+            }
+        }
+    },          
+}, {
+    collection: 'chwData'
+});
 // create models from mongoose schemas
 const primarydata = mongoose.model('primaryData', primaryDataSchema);
 const eventdata = mongoose.model('eventData', eventDataSchema);
+const orgdata = mongoose.model('orgData', eventDataSchema);
+const chwdata = mongoose.model('chwtData', eventDataSchema);
 
 // package the models in an object to export 
 module.exports = { primarydata, eventdata }
