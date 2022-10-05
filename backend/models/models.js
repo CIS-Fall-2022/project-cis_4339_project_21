@@ -2,13 +2,20 @@ const uuid = require('uuid');
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
+//collection for org
+let organizationSchema = new Schema({
+    _is: { type: String, default: uuid.v1 },
+    organizationName: {
+        type: String,
+        require: true,
+        unique: true
+    }
+}, {    collection: 'organizations'
+});
+
 //collection for intakeData
 let primaryDataSchema = new Schema({
     _id: { type: String, default: uuid.v1 },
-    clientID: {
-        type: int,
-        require: true
-    },
     firstName: {
         type: String,
         require: true
@@ -20,34 +27,31 @@ let primaryDataSchema = new Schema({
         type: String,
         required: true
     },
-    contact: {
-        email: {
+    email: {
+        type: String
+    },
+    phoneNumbers: {
+        type: Array,
+        required: true
+    },
+    address: {
+        line1: {
             type: String
         },
-        phoneNumbers: {
-            type: Array,
+        line2: {
+            type: String,
+        },
+        city: {
+            type: String,
             required: true
         },
-        address: {
-            line1: {
-                type: String
-            },
-            line2: {
-                type: String,
-            },
-            city: {
-                type: String,
-                required: true
-            },
-            county: {
-                type: String,
-            },
-            zip: {
-                type: int,
-            }
+        county: {
+            type: String,
+        },
+        zip: {
+            type: String,
         }
-    },          
-    
+    }
 }, {
     collection: 'primaryData',
     timestamps: true
@@ -59,15 +63,6 @@ let eventDataSchema = new Schema({
     eventName: {
         type: String,
         require: true
-    },
-    clientID: {
-        type: int
-    },
-    orgID: {
-        type: int
-    },
-    chwID: {
-        type: int
     },
     services: {
         type: Array
@@ -90,7 +85,7 @@ let eventDataSchema = new Schema({
             type: String,
         },
         zip: {
-            type: int,
+            type: String,
         }
     },
     description: {
@@ -103,95 +98,9 @@ let eventDataSchema = new Schema({
     collection: 'eventData'
 });
 
-//collection for ORG data
-let ORGDataSchema = new Schema({
-    _id: { type: String, default: uuid.v1 },
-    orgCode: {
-        type: int,
-        require: true
-    },
-    orgName: {
-        type: String
-    },
-    contact: {
-        email: {
-            type: String
-        },
-        phoneNumbers: {
-            type: Array,
-            required: true
-        },
-        address: {
-            line1: {
-                type: String
-            },
-            line2: {
-                type: String,
-            },
-            city: {
-                type: String,
-                required: true
-            },
-            county: {
-                type: String,
-            },
-            zip: {
-                type: int,
-            }
-        }
-    },          
-    description: {
-        type: String,
-    },
-    attendees: [{
-        type: String
-    }]
-}, {
-    collection: 'orgData'
-});
-
-//collection for ORG data
-let chwDataSchema = new Schema({
-    _id: { type: String, default: uuid.v1 },
-    chwID: {
-        type: int,
-        require: true
-    },
-    contact: {
-        email: {
-            type: String
-        },
-        phoneNumbers: {
-            type: Array,
-            required: true
-        },
-        address: {
-            line1: {
-                type: String
-            },
-            line2: {
-                type: String,
-            },
-            city: {
-                type: String,
-                required: true
-            },
-            county: {
-                type: String,
-            },
-            zip: {
-                type: int,
-            }
-        }
-    },          
-}, {
-    collection: 'chwData'
-});
 // create models from mongoose schemas
 const primarydata = mongoose.model('primaryData', primaryDataSchema);
 const eventdata = mongoose.model('eventData', eventDataSchema);
-const orgdata = mongoose.model('orgData', eventDataSchema);
-const chwdata = mongoose.model('chwtData', eventDataSchema);
 
 // package the models in an object to export 
 module.exports = { primarydata, eventdata }
