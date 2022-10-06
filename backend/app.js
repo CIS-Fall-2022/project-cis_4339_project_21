@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const morgan = require("morgan"); //better debugging
 const cors = require("cors");
 //allow using a .env file
-require("dotenv").config();   
+require("dotenv").config(); 
 
 //creates a new instance of express application
 const app = express();
@@ -14,8 +14,11 @@ app.use(cors({
 }));
 
 //sets up mongoose for the mongoDB connection
+
+MONGO_URL = `mongodb+srv://project21:project21@cluster0.4v6ht5o.mongodb.net/test`
+
 mongoose
-  .connect(process.env.MONGO_URL)
+  .connect(MONGO_URL)
   .then(() => {
     console.log("Database connection Success!");
   })
