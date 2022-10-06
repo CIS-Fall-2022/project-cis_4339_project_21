@@ -10,7 +10,8 @@ let organizationSchema = new Schema({
         require: true,
         unique: true
     }
-}, {    collection: 'organizations'
+}, {    
+    collection: 'organizations'
 });
 
 //collection for intakeData
@@ -114,4 +115,4 @@ const eventdata = mongoose.model('eventData', eventDataSchema);
 const organizations = mongoose.model('organizations', organizationSchema);
 
 // package the models in an object to export 
-module.exports = { primarydata, eventdata, organization };
+module.exports = { primarydata, eventdata, organization }
