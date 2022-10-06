@@ -13,4 +13,3 @@ router.get("/organization", (req, res, next) => {
 
 module.exports = router;
 
-// to worjk
