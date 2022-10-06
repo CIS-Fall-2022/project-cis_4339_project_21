@@ -4,7 +4,9 @@ This implementation is for NodeJS based on [Express](https://expressjs.com/) and
 
 ## Project setup
 ```
+cd backend
 npm install
+node app.js
 ```
 
 ### Before startup 
