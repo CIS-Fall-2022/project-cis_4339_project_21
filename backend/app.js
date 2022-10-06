@@ -18,7 +18,7 @@ app.use(cors({
 MONGO_URL = `mongodb+srv://project21:project21@cluster0.4v6ht5o.mongodb.net/test`
 
 mongoose
-  .connect(process.env.MONGO_URL)
+  .connect(MONGO_URL)
   .then(() => {
     console.log("Database connection Success!");
   })
