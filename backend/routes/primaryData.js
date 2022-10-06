@@ -11,6 +11,7 @@ require("dotenv").config();
 const ORGANIZATION = process.env.ORGANIZATION;
 
 //GET all entries for org
+//{ organization: organization_id }
 router.get("/", (req, res, next) => { 
     organizations.findOne({ organizationName: ORGANIZATION }, (error, data) => {
         if (error) {
