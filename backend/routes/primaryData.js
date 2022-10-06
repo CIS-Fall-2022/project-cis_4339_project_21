@@ -9,7 +9,7 @@ let { eventdata } = require("../models/models");
 //require .env
 require("dotenv").config();
 
-//GET all entries
+//GET all entries for org 
 router.get("/", (req, res, next) => { 
     primarydata.find( 
         (error, data) => {

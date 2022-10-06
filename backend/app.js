@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const morgan = require("morgan"); //better debugging
 const cors = require("cors");
 //allow using a .env file
-require("dotenv").config();   
+require("dotenv").config(); 
 
 //creates a new instance of express application
 const app = express();
