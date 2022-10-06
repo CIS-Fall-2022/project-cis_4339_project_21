@@ -42,18 +42,35 @@ router.get("/id/:id", (req, res, next) => {
 });
 
 //GET entries based on search query
-//Ex: '...?eventName=Food&searchBy=name' 
-router.get("/search/", (req, res, next) => { const express = require("express");
-const router = express.Router();
-
-//importing data model schemas
-let { eventdata } = require("../models/models"); 
-let { organizations } = require("../models/models"); 
-
-//allow using a .env file
-require("dotenv").config();
-
-const ORGANIZATION = process.env.ORGANIZATION;
+router.get("/search/", (req, res, next) => { 
+    let dbQuery = "";
+    if (req.query["searchBy"] === 'name') {
+        dbQuery = { eventName: { $regex: `^${req.query["eventName"]}`, $options: "i" } }
+    } else if (req.query["searchBy"] === 'date') {
+        dbQuery = {
+            date:  req.query["eventDate"]
+        }
+    };
+    organizations.findOne({ organizationName: ORGANIZATION }, (error, data) => { 
+        if (error) {
+            console.log(error)
+        } else {
+            dbQuery['organization'] = data._id
+            console.log(dbQuery)
+            eventdata.find(
+                dbQuery,
+                (error, data) => {
+                    if (error) {
+                        return next(error);
+                    } else {
+                        res.json(data);
+                    }
+                }
+            );
+        }
+    });
+    
+});
 
 //GET all entries
 router.get("/", (req, res, next) => { 
@@ -201,5 +218,16 @@ router.put("/addAttendee/:id", (req, res, next) => {
     
 });
 
+
+//DELETE events by id
+router.delete("/delete", (req, res, next) => {
+    eventdata.remove({ _id: req.body.id }, function (err) {
+        if (err) {
+            console.log(err)
+        } else {
+            res.json({ "status": "Event deleted" });
+        }
+    });
+});
 
 module.exports = router;
