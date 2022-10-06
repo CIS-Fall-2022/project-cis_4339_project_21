@@ -9,18 +9,27 @@ let { eventdata } = require("../models/models");
 //require .env
 require("dotenv").config();
 
-//GET all entries for org 
+
+//GET all entries for org
 router.get("/", (req, res, next) => { 
-    primarydata.find( 
-        (error, data) => {
-            if (error) {
-                return next(error);
-            } else {
-                res.json(data);
-            }
+    organizations.findOne({ organizationName: ORGANIZATION }, (error, data) => {
+        if (error) {
+            console.log(error)
+        } else {
+            primarydata.find({organization: data._id},
+                (error, data) => {
+                    if (error) {
+                        return next(error);
+                    } else {
+                        res.json(data);
+                    }
+                }
+            ).sort({ 'updatedAt': -1 }).limit(10);
         }
-    ).sort({ 'updatedAt': -1 }).limit(10);
+    });
 });
+
+
 
 //GET single entry by ID
 router.get("/id/:id", (req, res, next) => {
@@ -47,17 +56,28 @@ router.get("/search/", (req, res, next) => {
             "phoneNumbers.primaryPhone": { $regex: `^${req.query["phoneNumbers.primaryPhone"]}`, $options: "i" }
         }
     };
-    primarydata.find( 
-        dbQuery, 
-        (error, data) => { 
-            if (error) {
-                return next(error);
-            } else {
-                res.json(data);
-            }
+
+    organizations.findOne({ organizationName: ORGANIZATION }, (error, data) => { 
+        if (error) {
+            console.log(error)
+        } else {
+            dbQuery['organization'] = data._id
+            console.log(dbQuery)
+            primarydata.find(
+                dbQuery,
+                (error, data) => {
+                    if (error) {
+                        return next(error);
+                    } else {
+                        res.json(data);
+                    }
+                }
+            );
         }
-    );
+    });
 });
+
+
 
 //GET events for a single client
 router.get("/events/:id", (req, res, next) => { 
@@ -65,21 +85,45 @@ router.get("/events/:id", (req, res, next) => {
 });
 
 //POST
-router.post("/", (req, res, next) => { 
-    primarydata.create( 
-        req.body,
-        (error, data) => { 
-            if (error) {
-                return next(error);
-            } else {
-                res.json(data); 
+router.post("/", (req, res, next) => {    
+    organizations.findOne({ organizationName: req.body.organization }, function (err, doc) {
+        if (err) {
+            console.log(err)
+        } else {
+            if (doc) {
+                console.log(doc)
+                req.body.organization = doc._id
+                primarydata.create(
+                    req.body,
+                    (error, data) => {
+                        if (error) {
+                            return next(error);
+                        } else {
+                            res.json(data);
+                        }
+                    }
+                );
+                primarydata.createdAt;
+                primarydata.updatedAt;
+                primarydata.createdAt instanceof Date;    
             }
+            
         }
-    );
-    primarydata.createdAt;
-    primarydata.updatedAt;
-    primarydata.createdAt instanceof Date;
+    });
 });
+
+//DELETE clients by id
+router.delete("/delete", (req, res, next) => {
+    console.log(req.body.id)
+    primarydata.remove({ _id: req.body.id }, function (err) {
+        if (err) {
+            console.log(err)
+        } else {
+            res.json({"status": "Client deleted"});
+        }
+    });
+});
+
 
 //PUT update (make sure req body doesn't have the id)
 router.put("/:id", (req, res, next) => { 
@@ -95,5 +139,7 @@ router.put("/:id", (req, res, next) => {
         }
     );
 });
+
+
 
 module.exports = router;
