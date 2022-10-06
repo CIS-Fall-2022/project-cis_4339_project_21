@@ -1,14 +1,14 @@
 const express = require("express"); 
 const router = express.Router(); 
-const ORGANIZATION = process.env.ORGANIZATION;
 
 //importing data model schemas
 let { primarydata } = require("../models/models"); 
-let { eventdata } = require("../models/models"); 
+let { organizations } = require("../models/models"); 
 
 //require .env
 require("dotenv").config();
 
+const ORGANIZATION = process.env.ORGANIZATION;
 
 //GET all entries for org
 router.get("/", (req, res, next) => { 
