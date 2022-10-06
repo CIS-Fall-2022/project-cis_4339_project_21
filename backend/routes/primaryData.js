@@ -46,7 +46,6 @@ router.get("/id/:id", (req, res, next) => {
 });
 
 //GET entries based on search query
-//Ex: '...?firstName=Bob&lastName=&searchBy=name' 
 router.get("/search/", (req, res, next) => { 
     let dbQuery = "";
     if (req.query["searchBy"] === 'name') {
@@ -81,7 +80,7 @@ router.get("/search/", (req, res, next) => {
 
 //GET events for a single client
 router.get("/events/:id", (req, res, next) => { 
-    
+        
 });
 
 //POST
@@ -125,7 +124,7 @@ router.delete("/delete", (req, res, next) => {
 });
 
 
-//PUT update (make sure req body doesn't have the id)
+//PUT update 
 router.put("/:id", (req, res, next) => { 
     primarydata.findOneAndUpdate( 
         { _id: req.params.id }, 
