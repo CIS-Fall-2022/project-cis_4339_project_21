@@ -2,15 +2,17 @@ const uuid = require('uuid');
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-//collection for org
+
+//collection for organization
 let organizationSchema = new Schema({
-    _is: { type: String, default: uuid.v1 },
+    _id: { type: String, default: uuid.v1 },
     organizationName: {
         type: String,
         require: true,
         unique: true
     }
-}, {    collection: 'organizations'
+}, {
+    collection: 'organizations'
 });
 
 //collection for intakeData
@@ -51,6 +53,11 @@ let primaryDataSchema = new Schema({
         zip: {
             type: String,
         }
+    },
+    organization: {
+        type: Schema.Types.ObjectId,
+        ref: 'organization',
+        required: true
     }
 }, {
     collection: 'primaryData',
@@ -93,14 +100,22 @@ let eventDataSchema = new Schema({
     },
     attendees: [{
         type: String
-    }]
+    }],
+    organization: {
+        type: Schema.Types.ObjectId,
+        ref: 'organization',
+        required: true
+    }
 }, {
     collection: 'eventData'
 });
 
+
+
 // create models from mongoose schemas
 const primarydata = mongoose.model('primaryData', primaryDataSchema);
 const eventdata = mongoose.model('eventData', eventDataSchema);
+const organizations = mongoose.model('organizations', organizationSchema);
 
 // package the models in an object to export 
-module.exports = { primarydata, eventdata }
+module.exports = { primarydata, eventdata, organizations }
