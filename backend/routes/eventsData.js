@@ -3,19 +3,32 @@ const router = express.Router();
 
 //importing data model schemas
 let { eventdata } = require("../models/models"); 
+let { organizations } = require("../models/models"); 
+
+//allow using a .env file
+require("dotenv").config();  
+
+const ORGANIZATION = process.env.ORGANIZATION;
 
 //GET all entries
 router.get("/", (req, res, next) => { 
-    eventdata.find( 
-        (error, data) => {
-            if (error) {
-                return next(error);
-            } else {
-                res.json(data);
-            }
+    organizations.findOne({ organizationName: ORGANIZATION }, (error, data) => { 
+        if (error) {
+            console.log(error)
+        } else {
+            eventdata.find({organization: data._id},
+                (error, data) => {
+                    if (error) {
+                        return next(error);
+                    } else {
+                        res.json(data);
+                    }
+                }
+            ).sort({ 'updatedAt': -1 }).limit(10);
         }
-    ).sort({ 'updatedAt': -1 }).limit(10);
+    });
 });
+
 
 //GET single entry by ID
 router.get("/id/:id", (req, res, next) => { 
@@ -39,16 +52,25 @@ router.get("/search/", (req, res, next) => {
             date:  req.query["eventDate"]
         }
     };
-    eventdata.find( 
-        dbQuery, 
-        (error, data) => { 
-            if (error) {
-                return next(error);
-            } else {
-                res.json(data);
-            }
+    organizations.findOne({ organizationName: ORGANIZATION }, (error, data) => { 
+        if (error) {
+            console.log(error)
+        } else {
+            dbQuery['organization'] = data._id
+            console.log(dbQuery)
+            eventdata.find(
+                dbQuery,
+                (error, data) => {
+                    if (error) {
+                        return next(error);
+                    } else {
+                        res.json(data);
+                    }
+                }
+            );
         }
-    );
+    });
+    
 });
 
 //GET events for which a client is signed up
@@ -66,18 +88,28 @@ router.get("/client/:id", (req, res, next) => {
 });
 
 //POST
-router.post("/", (req, res, next) => { 
-    eventdata.create( 
-        req.body, 
-        (error, data) => { 
-            if (error) {
-                return next(error);
-            } else {
-                res.json(data);
+router.post("/", (req, res, next) => {
+    organizations.findOne({ organizationName: req.body.organization }, function (err, doc) {
+        if (err) {
+            console.log(err)
+        } else {
+            if (doc) {
+                req.body.organization = doc._id
+                eventdata.create(
+                    req.body,
+                    (error, data) => {
+                        if (error) {
+                            return next(error);
+                        } else {
+                            res.json(data);
+                        }
+                    }
+                );
             }
         }
-    );
+    });
 });
+;
 
 //PUT
 router.put("/:id", (req, res, next) => {
@@ -96,26 +128,28 @@ router.put("/:id", (req, res, next) => {
 
 //PUT add attendee to event
 router.put("/addAttendee/:id", (req, res, next) => {
-    //only add attendee if not yet signed uo
+    //only add attendee if not yet signed up yet
     eventdata.find( 
         { _id: req.params.id, attendees: req.body.attendee }, 
         (error, data) => { 
             if (error) {
                 return next(error);
             } else {
+                console.log(data, data.length)
                 if (data.length == 0) {
                     eventdata.updateOne(
                         { _id: req.params.id }, 
                         { $push: { attendees: req.body.attendee } },
                         (error, data) => {
                             if (error) {
-                                consol
                                 return next(error);
                             } else {
                                 res.json(data);
                             }
                         }
                     );
+                } else {
+                    res.json({"message": "failed", "data": "Client has already signed up for this event"});
                 }
                 
             }
@@ -123,5 +157,6 @@ router.put("/addAttendee/:id", (req, res, next) => {
     );
     
 });
+
 
 module.exports = router;
