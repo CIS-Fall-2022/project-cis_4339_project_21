@@ -20,3 +20,7 @@ MONGO_URL = mongodb+srv://project21:project21@cluster0.4v6ht5o.mongodb.net/test
 ```
 npm start
 ```
+
+### Documentation
+
+Published link: https://documenter.getpostman.com/view/19996094/2s83zfRR5h
