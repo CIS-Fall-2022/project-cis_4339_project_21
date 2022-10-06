@@ -4,7 +4,7 @@ const Schema = mongoose.Schema;
 
 //collection for org
 let organizationSchema = new Schema({
-    _is: { type: String, default: uuid.v1 },
+    _id: { type: String, default: uuid.v1 },
     organizationName: {
         type: String,
         require: true,
@@ -51,6 +51,11 @@ let primaryDataSchema = new Schema({
         zip: {
             type: String,
         }
+    },
+    organization: {
+        type: Schema.Types.ObjectId,
+        ref: 'organization',
+        required: true
     }
 }, {
     collection: 'primaryData',
@@ -93,7 +98,12 @@ let eventDataSchema = new Schema({
     },
     attendees: [{
         type: String
-    }]
+    }],
+    organization: {
+        type: Schema.Types.ObjectId,
+        ref: 'organization',
+        required: true
+    }
 }, {
     collection: 'eventData'
 });
@@ -102,5 +112,6 @@ let eventDataSchema = new Schema({
 const primarydata = mongoose.model('primaryData', primaryDataSchema);
 const eventdata = mongoose.model('eventData', eventDataSchema);
 const organizations = mongoose.model('organizations', organizationSchema);
+
 // package the models in an object to export 
-module.exports = { primarydata, eventdata }
+module.exports = { primarydata, eventdata, organization };
