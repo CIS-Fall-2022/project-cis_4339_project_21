@@ -14,6 +14,9 @@ app.use(cors({
 }));
 
 //sets up mongoose for the mongoDB connection
+
+MONGO_URL = `mongodb+srv://project21:project21@cluster0.4v6ht5o.mongodb.net/test`
+
 mongoose
   .connect(process.env.MONGO_URL)
   .then(() => {
