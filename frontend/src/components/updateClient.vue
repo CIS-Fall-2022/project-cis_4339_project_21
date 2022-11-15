@@ -107,8 +107,12 @@ export default {
     addToEvent() {
       this.eventsChosen.forEach((event) => {
         let apiURL =
-          import.meta.env.VITE_ROOT_API + `/eventdata/addAttendee/` + event._id;
-        axios.put(apiURL, { attendee: this.$route.params.id }).then(() => {
+        import.meta.env.VITE_ROOT_API + `/eventdata/addAttendee/` + event._id;
+        axios.put(apiURL, { attendee: this.$route.params.id }).then((resp) => {
+          if(resp.data.message == "failed"){
+            alert(resp.data.data);
+            location.reload()
+          }
           this.clientEvents = [];
           axios
             .get(
@@ -116,15 +120,18 @@ export default {
                 `/eventdata/client/${this.$route.params.id}`
             )
             .then((resp) => {
-              let data = resp.data;
-              for (let i = 0; i < data.length; i++) {
-                this.clientEvents.push({
-                  eventName: data[i].eventName,
-                });
-              }
+                let data = resp.data;
+                for (let i = 0; i < data.length; i++) {
+                  this.clientEvents.push({
+                    eventName: data[i].eventName,
+                    eventDate: data[i].date,
+                  });
+                }
             });
         });
+        
       });
+      
     },
   },
   validations() {
