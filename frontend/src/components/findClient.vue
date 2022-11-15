@@ -84,10 +84,14 @@
             </tr>
           </thead>
           <tbody class="divide-y divide-gray-300">
-            <tr @click="editClient(client._id)" v-for="client in queryData" :key="client._id">
+            <tr v-for="client in queryData" :key="client._id">
               <td class="p-2 text-left">{{ client.firstName + " " + client.lastName }}</td>
               <td class="p-2 text-left">{{ client.phoneNumbers[0].primaryPhone }}</td>
               <td class="p-2 text-left">{{ client.address.city }}</td>
+              <td scope="row" class="trashIconContainer">
+                <i class="material-icons option-icon" @click="editClient(client._id)">edit</i>
+                <i class="material-icons option-icon" @click="deleteClient(client._id)">delete</i>
+              </td>
             </tr>
           </tbody>
         </table>
@@ -148,6 +152,18 @@ export default {
     editClient(clientID) {
       this.$router.push({ name: "updateclient", params: { id: clientID } });
     },
+    deleteClient(clientID) {
+      let apiURL = import.meta.env.VITE_ROOT_API + `/primarydata/delete`;
+      axios.delete(apiURL, {data: {id: clientID}}).then((resp) => {
+        alert("Client has been deleted.");
+        location.reload()
+      });
+    },
   },
 };
-</script>
+  </script>
+<style>
+.option-icon:hover {
+  cursor: pointer;
+}
+</style>
