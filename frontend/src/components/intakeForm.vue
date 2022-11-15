@@ -2,16 +2,19 @@
 import useVuelidate from "@vuelidate/core";
 import { required, email, alpha, numeric } from "@vuelidate/validators";
 import axios from "axios";
+import { mydata } from "../assets/fetch_organization";
 export default {
   setup() {
     return { v$: useVuelidate({ $autoDirty: true }) };
   },
   mounted() {
+    mydata().then(r => { this.client.organization = r.data.name });
     window.scrollTo(0, 0);
   },
   data() {
     return {
       client: {
+        organization: "",
         firstName: "",
         middleName: "",
         lastName: "",
@@ -45,6 +48,7 @@ export default {
             alert("Client has been succesfully added.");
             this.$router.push("/findclient");
             this.client = {
+              organization: "",
               firstName: "",
               middleName: "",
               lastName: "",
@@ -104,6 +108,10 @@ export default {
             <label class="block">
               <span class="text-gray-700">First Name</span>
               <span style="color:#ff0000">*</span>
+            <input
+                type="hidden"
+                v-model="client.organization"
+              />
               <input
                 type="text"
                 class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
