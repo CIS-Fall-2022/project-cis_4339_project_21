@@ -48,7 +48,7 @@
           background: linear-gradient(250deg, #C8102E 70%, #efecec 50.6%);
         "
       >
-        <h1 class="mr-20 text-3xl text-white">Dataplatform</h1>
+        <h1 class="mr-20 text-3xl text-white">{{organization}}</h1>
       </section>
       <div>
         <router-view></router-view>
@@ -58,8 +58,17 @@
 </template>
 
 <script>
+import { mydata } from "./assets/fetch_organization";
 export default {
   name: "App",
+  data() {
+    return {
+      organization : ""
+    }
+  },
+  mounted() {
+    mydata().then(r => { this.organization = r.data.name });
+  }
 };
 </script>
 
