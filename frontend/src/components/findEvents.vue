@@ -72,10 +72,14 @@
             </tr>
           </thead>
           <tbody class="divide-y divide-gray-300">
-            <tr @click="editEvent(event._id)" v-for="event in queryData" :key="event._id">
+              <tr v-for="event in queryData" :key="event._id">
               <td class="p-2 text-left">{{ event.eventName }}</td>
               <td class="p-2 text-left">{{ formattedDate(event.date) }}</td>
               <td class="p-2 text-left">{{ event.address.line1 }}</td>
+              <td scope="row" class="trashIconContainer">
+                <i class="material-icons option-icon" @click="editEvent(event._id)">edit</i>
+                <i class="material-icons option-icon" @click="deleteEvent(event._id)">delete</i>
+              </td>
             </tr>
           </tbody>
         </table>
@@ -140,6 +144,18 @@ export default {
     editEvent(eventID) {
       this.$router.push({ name: "eventdetails", params: { id: eventID } });
     },
+    deleteEvent(eventID) {
+      let apiURL = import.meta.env.VITE_ROOT_API + `/eventdata/delete`;
+      axios.delete(apiURL, {data: {id: eventID}}).then((resp) => {
+        alert("Event has been deleted.");
+        location.reload()
+      });
+    },
   },
 };
-</script>
+  </script>
+<style>
+.option-icon:hover {
+  cursor: pointer;
+}
+</style>
