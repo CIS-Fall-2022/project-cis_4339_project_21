@@ -15,8 +15,12 @@ app.use(cors({
 }));
 
 //sets up mongoose for the mongoDB connection
+//old connection = `mongodb+srv://project21:project21@cluster0.4v6ht5o.mongodb.net/test`
 
-MONGO_URL = `mongodb+srv://project21:project21@cluster0.4v6ht5o.mongodb.net/test`
+
+
+MONGO_URL = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PW}@${process.env.DB_HOST}`
+//sets up mongoose for the mongoDB connection
 
 mongoose
   .connect(MONGO_URL)
@@ -37,10 +41,12 @@ app.use(morgan("dev"));
 //import routes
 const primaryDataRoute  = require('./routes/primaryData');
 const eventsDataRoute  = require('./routes/eventsData');
+const organizationDataRoute  = require('./routes/organizationData');
 
 //setup middle ware for routes
 app.use('/primaryData', primaryDataRoute);
 app.use('/eventData', eventsDataRoute)
+app.use('/organizationData', organizationDataRoute)
 
 app.listen(PORT, () => {
   console.log("Server started listening on port : ", PORT);
