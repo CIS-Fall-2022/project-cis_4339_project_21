@@ -205,9 +205,13 @@
 import useVuelidate from "@vuelidate/core";
 import { required } from "@vuelidate/validators";
 import axios from "axios";
+import {mydata} from "../assets/fetch_organization";
 export default {
   setup() {
     return { v$: useVuelidate({ $autoDirty: true }) };
+  },
+  mounted() {
+      mydata().then(r => { this.event.organization = r.data.name });
   },
   data() {
     return {
@@ -224,6 +228,7 @@ export default {
           zip: "",
         },
         description: "",
+        organization: "",
       },
     };
   },
