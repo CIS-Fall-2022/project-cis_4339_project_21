@@ -119,16 +119,16 @@ router.delete("/delete", (req, res, next) => {
         if (err) {
             console.log(err)
         } else {
-            res.json({"status": "Client deleted"});
+            res.json({"status": "Client successfully deleted"});
         }
     });
 });
 
 
-//PUT update 
-router.put("/:id", (req, res, next) => { 
-    primarydata.findOneAndUpdate( 
-        { _id: req.params.id }, 
+//PUT update (make sure req body doesn't have the id)
+router.put("/:id", (req, res, next) => {
+    primarydata.findOneAndUpdate(
+        { _id: req.params.id },
         req.body,
         (error, data) => {
             if (error) {
@@ -138,7 +138,7 @@ router.put("/:id", (req, res, next) => {
             }
         }
     );
-});
+}); 
 
 
 
