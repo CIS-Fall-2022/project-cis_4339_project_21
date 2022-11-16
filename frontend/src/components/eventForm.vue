@@ -227,8 +227,8 @@ export default {
           county: "",
           zip: "",
         },
-        description: "",
-        organization: "",
+      description: "",
+      organization: "",
       },
     };
   },
