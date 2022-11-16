@@ -13,7 +13,15 @@ node app.js
 Setup a .env file with the following variables, e.g.:
 
 ```
-MONGO_URL = mongodb+srv://project21:project21@cluster0.4v6ht5o.mongodb.net/test
+.env
+
+PORT=3000
+STAGE=development
+DB_HOST=cluster0.4v6ht5o.mongodb.net/test?authMechanism=SCRAM-SHA-1
+DB_USER=project21
+DB_PW=project21
+ORGANIZATION=Project21
+
 ```
 
 ### Compiles and hot-reloads for development
