@@ -17,8 +17,6 @@ app.use(cors({
 //sets up mongoose for the mongoDB connection
 //old connection = `mongodb+srv://project21:project21@cluster0.4v6ht5o.mongodb.net/test`
 
-
-
 MONGO_URL = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PW}@${process.env.DB_HOST}`
 //sets up mongoose for the mongoDB connection
 
