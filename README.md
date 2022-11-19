@@ -11,7 +11,7 @@ STAGE=development
 DB_HOST=cluster0.4v6ht5o.mongodb.net/test?authMechanism=SCRAM-SHA-1
 DB_USER=project21
 DB_PW=project21
-ORGANIZATION=Project21
+ORGANIZATION=Project 21
 
 cd backend
 npm install
